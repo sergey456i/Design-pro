@@ -4,16 +4,28 @@
 <div class="container">
     <h2>Изменить статус заявки "{{ request.title }}"</h2>
 
+    <p><strong>Текущий статус:</strong>
+        <span class="badge
+            {% if request.status == 'new' %} bg-secondary
+            {% elif request.status == 'in_progress' %} bg-warning
+            {% elif request.status == 'done' %} bg-success
+            {% endif %}">
+            {{ request.get_status_display }}
+        </span>
+    </p>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <div class="mb-3">
-            <label><input type="radio" name="status" value="in_progress" required> Принято в работу</label><br>
-            <textarea name="comment" class="form-control" placeholder="Комментарий администратора (обязательно при выборе 'Принято в работу')"></textarea>
-        </div>
+        {% if request.status == 'new' %}
+            <div class="mb-3">
+                <label><input type="radio" name="status" value="in_progress" required> Принято в работу</label><br>
+                <textarea name="comment" class="form-control" placeholder="Комментарий администратора (обязательно при выборе 'Принято в работу')"></textarea>
+            </div>
+        {% endif %}
 
         <div class="mb-3">
-            <label><input type="radio" name="status" value="done"> Выполнено</label><br>
+            <label><input type="radio" name="status" value="done" required> Выполнено</label><br>
             <label>Изображение дизайна (обязательно при выборе 'Выполнено'):</label>
             <input type="file" name="design_image" class="form-control" accept=".jpg,.jpeg,.png,.bmp">
         </div>

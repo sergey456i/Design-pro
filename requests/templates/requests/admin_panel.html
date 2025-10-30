@@ -1,20 +1,42 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Админка — новые заявки</h2>
+<div class="container">
+    <h2>Админка — Заявки</h2>
 
-<h3>Новые заявки ({{ requests|length }})</h3>
-{% for req in requests %}
-<div style="border:1px solid #ccc; padding:10px; margin:10px;">
-    <h3>{{ req.title }}</h3>
-    <p>Пользователь: {{ req.user.first_name|default:req.user.username }}</p>
-    <p>Категория: {{ req.category.name }}</p>
-    <p>Описание: {{ req.description }}</p>
-    <img src="{{ req.image.url }}" width="200"><br><br>
-    <a href="{% url 'change_status' req.pk %}">Изменить статус</a>
+    <h3>Заявки ({{ requests|length }})</h3>
+    {% if requests %}
+        <div class="row">
+            {% for req in requests %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ req.title }}</h5>
+                        <p class="card-text">
+                            <strong>Пользователь:</strong> {{ req.user.first_name|default:req.user.username }}<br>
+                            <strong>Категория:</strong> {{ req.category.name }}<br>
+                            <strong>Статус:</strong>
+                            <span class="badge
+                                {% if req.status == 'new' %} bg-secondary
+                                {% elif req.status == 'in_progress' %} bg-warning
+                                {% elif req.status == 'done' %} bg-success
+                                {% endif %}">
+                                {{ req.get_status_display }}
+                            </span><br>
+                            {% if req.admin_comment %}
+                                <strong>Комментарий:</strong> {{ req.admin_comment }}<br>
+                            {% endif %}
+                        </p>
+                        <img src="{{ req.image.url }}" class="card-img-top" alt="Фото помещения" style="max-height: 150px;">
+                        <a href="{% url 'change_status' req.pk %}" class="btn btn-primary mt-2">Изменить статус</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Нет заявок для отображения.</p>
+    {% endif %}
+
+    <h3 class="mt-4"><a href="{% url 'manage_categories' %}" class="btn btn-info">Управление категориями</a></h3>
 </div>
-{% empty %}
-<p>Нет новых заявок.</p>
-{% endfor %}
-
-<h3><a href="{% url 'manage_categories' %}">Управление категориями</a></h3>
 {% endblock %}
