@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Design.pro — студия интерьеров</h1>
+
+<h2>Последние выполненные работы ({{ done_requests|length }})</h2>
+{% for req in done_requests %}
+<div style="border: 1px solid #ccc; margin: 10px; padding: 10px; display: inline-block; width: 200px;">
+    <h3>{{ req.title }}</h3>
+    <p><strong>Категория:</strong> {{ req.category.name }}</p>
+    <p><strong>Дата:</strong> {{ req.created_at|date:"d.m.Y" }}</p>
+    <img src="{{ req.image.url }}" width="180" style="display:block;">
+</div>
+{% empty %}
+<p>Нет выполненных работ.</p>
+{% endfor %}
+
+<h3>Заявок в работе: {{ in_progress_count }}</h3>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Design.pro</title>
+</head>
+<body>
+    <nav>
+        {% if user.is_authenticated %}
+            Привет, {{ user.first_name|default:user.username }}!
+            <a href="{% url 'profile' %}">Личный кабинет</a> |
+            <a href="{% url 'logout' %}">Выход</a>
+            {% if user.is_superuser %}
+                | <a href="/superadmin/">Админка</a>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'login' %}">Вход</a> |
+            <a href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+    </nav>
+    <hr>
+    {% if messages %}
+        {% for message in messages %}
+            <div style="color: red;">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div style="padding: 20px;">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

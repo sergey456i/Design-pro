@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Управление категориями</h2>
+
+<form method="post">
+    {% csrf_token %}
+    Новая категория: <input type="text" name="name" required>
+    <button type="submit">Добавить</button>
+</form>
+
+<h3>Существующие категории:</h3>
+<ul>
+{% for cat in categories %}
+    <li>
+        {{ cat.name }}
+        <a href="{% url 'delete_category' cat.pk %}" style="color:red;" onclick="return confirm('Удалить категорию и все её заявки?')">Удалить</a>
+    </li>
+{% empty %}
+    <li>Нет категорий</li>
+{% endfor %}
+</ul>
+
+<a href="/superadmin/">Назад</a>
+{% endblock %}

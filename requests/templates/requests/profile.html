@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Мои заявки</h2>
+
+<a href="{% url 'create_request' %}">Создать заявку</a> |
+<a href="?status=new">Новые</a> |
+<a href="?status=in_progress">В работе</a> |
+<a href="?status=done">Выполнено</a> |
+<a href="?">Все</a>
+
+{% if requests %}
+    <ul>
+    {% for req in requests %}
+        <li>
+            <strong>{{ req.title }}</strong> ({{ req.created_at|date:"d.m.Y H:i" }})<br>
+            Категория: {{ req.category.name }}<br>
+            Статус: {{ req.get_status_display }}<br>
+            {% if req.status == 'new' %}
+                <a href="{% url 'delete_request' req.pk %}">Удалить</a>
+            {% endif %}
+        </li>
+        <hr>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>У вас нет заявок.</p>
+{% endif %}
+{% endblock %}
