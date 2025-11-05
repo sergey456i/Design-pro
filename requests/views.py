@@ -37,7 +37,7 @@ def create_request(request):
         if image.size > 2 * 1024 * 1024:
             messages.error(request, 'Размер изображения не должен превышать 2 МБ.')
             return redirect('create_request')
-        if image.content_type not in ['image/jpeg', 'image/png', 'image/bmp']:
+        if image.content_type not in ['image/jpeg', 'image/png', 'image/webp']:
             messages.error(request, 'Недопустимый формат изображения.')
             return redirect('create_request')
 
