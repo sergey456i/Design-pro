@@ -8,7 +8,6 @@ def superuser_required(user):
 
 @user_passes_test(superuser_required)
 def admin_panel(request):
-    # Показываем заявки, которые НЕ выполнены (т.е. new и in_progress)
     requests = DesignRequest.objects.filter(status__in=['new', 'in_progress']).order_by('status', '-created_at')
     return render(request, 'requests/admin_panel.html', {'requests': requests})
 
@@ -20,7 +19,6 @@ def change_status(request, pk):
     if request.method == 'POST':
         new_status = request.POST['status']
 
-        # Проверяем, можно ли изменить статус
         if new_status == 'in_progress':
             if current_status != 'new':
                 messages.error(request, 'Статус можно изменить только с "Новая".')
@@ -36,7 +34,6 @@ def change_status(request, pk):
             return redirect('/superadmin/')
 
         elif new_status == 'done':
-            # Разрешаем переход с 'new' или 'in_progress'
             if current_status not in ['new', 'in_progress']:
                 messages.error(request, 'Статус можно изменить только с "Новая" или "Принято в работу".')
                 return redirect('change_status', pk=pk)

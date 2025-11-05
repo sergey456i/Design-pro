@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Design.pro</title>
-
-    <!-- Подключаем локальный Bootstrap CSS -->
+    
     {% load static %}
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 </head>
 <body>
-    <!-- Навигационная панель -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">Design.pro</a>
@@ -30,10 +28,8 @@
             </div>
         </div>
     </nav>
-
-    <!-- Основное содержимое -->
+    
     <div class="container mt-4">
-        <!-- Отображение сообщений Django -->
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags|default:'info' }}" role="alert">
@@ -41,12 +37,8 @@
                 </div>
             {% endfor %}
         {% endif %}
-
-        <!-- Блок для контента страниц -->
         {% block content %}{% endblock %}
     </div>
-
-    <!-- Подключаем локальный Bootstrap JS (опционально, если нужны интерактивные компоненты) -->
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
